@@ -2,11 +2,25 @@ import { Request, Response } from "express"
 import UserModel from "../models/user.models";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { signUpData } from "../@types/user.types";
+import { signInDataValidation, signUpDataValidation } from "../validation/user.validation";
 
 const userSignUp = async (req: Request, res: Response) => {
     
+    // Input Validation
+    const isValid = signUpDataValidation.safeParse(req.body);
+
+    if(!isValid.success){
+        res.status(400).json({
+            "Message": "Invalid Data Input",
+            "Error": isValid.error.format()
+        });
+
+        return;
+    }
+
     // Destrucutre the request body
-    const { username, email, password } = req.body;
+    const { username, email, password }: signUpData = req.body;
 
     // Check whether user already exists or not
     const isFound = await UserModel.findOne({
@@ -42,6 +56,18 @@ const userSignUp = async (req: Request, res: Response) => {
 
 const userSignIn = async (req: Request, res: Response) => {
 
+    // Input Validation
+    const isValid = signInDataValidation.safeParse(req.body);
+
+    if(!isValid.success){
+        res.status(400).json({
+            "Message": "Invalid Data Input",
+            "Error": isValid.error.format()
+        });
+
+        return;
+    }
+
     // Destructure the request body
     const { email, password } = req.body;
 
@@ -50,12 +76,15 @@ const userSignIn = async (req: Request, res: Response) => {
         email
     })
 
+    // User does not exist
     if(!isFound){
         res.status(404).json({
             "message": "User not found!"
         })
+        return;
     }
 
+    // Check whether password is valid or not
     const isPasswordCorrect: boolean = await bcrypt.compare(password, isFound?.password as string);
 
     if(isPasswordCorrect){
@@ -73,6 +102,7 @@ const userSignIn = async (req: Request, res: Response) => {
         res.status(401).json({
             "Message": "Unauthorized User"
         })
+        return;
     }
 }
 

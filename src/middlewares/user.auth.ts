@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
 
 const userAuth = (req: Request, res: Response, next: NextFunction) => {
-    const token: string | string[] | undefined = req.headers.token as string;
+    const token: string = req.headers.token as string;
 
     if(!token){
         res.status(400).json({
