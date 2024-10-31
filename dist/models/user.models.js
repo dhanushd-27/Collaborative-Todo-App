@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const userSchema = new Schema({
-    username: String,
+    username: { type: String, unique: true },
     email: { type: String, unique: true },
     password: String
 }, { timestamps: true });
-const UserModel = mongoose_1.default.model("users", userSchema);
-exports.default = UserModel;
+const User = mongoose_1.default.model("User", userSchema);
+exports.default = User;

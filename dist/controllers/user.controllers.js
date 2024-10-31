@@ -29,15 +29,17 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     // Destrucutre the request body
     const { username, email, password } = req.body;
-    // Check whether user already exists or not
+    // Check whether email or username already exists or not
     const isFound = yield user_models_1.default.findOne({
-        username,
         email
     });
+    const isTaken = yield user_models_1.default.findOne({
+        username
+    });
     // Return Conflict Status Code if user exists
-    if (!isFound) {
+    if (!isFound || !isTaken) {
         res.status(409).json({
-            "Message": "User Already Exists"
+            "Message": "User with username and email Already Exists"
         });
     }
     // Hash Password for Data Security
@@ -85,8 +87,9 @@ const userSignIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const isPasswordCorrect = yield bcrypt_1.default.compare(password, isFound === null || isFound === void 0 ? void 0 : isFound.password);
     if (isPasswordCorrect) {
         const token = jsonwebtoken_1.default.sign({
+            username: isFound.username,
             email,
-            id: isFound === null || isFound === void 0 ? void 0 : isFound._id
+            id: isFound._id
         }, process.env.SECRET_KEY);
         res.status(200).json({
             "Message": "User Logged In Successfully",

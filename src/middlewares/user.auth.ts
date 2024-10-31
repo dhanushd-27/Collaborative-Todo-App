@@ -11,10 +11,10 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
     }
 
     try {
-        const decodedData = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+        const decodedData = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload;
         
         // req.cookies is not secured ig
-        req.cookies = decodedData
+        req.user = decodedData
 
         next();
     } catch (error) {

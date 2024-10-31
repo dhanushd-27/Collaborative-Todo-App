@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
-import UserModel from "../models/user.models";
+import User from "../models/user.models";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { signUpData } from "../@types/user.types";
+import { signUpData } from "../types/user.types";
 import { signInDataValidation, signUpDataValidation } from "../validation/user.validation";
+import { ObjectId } from "mongoose";
 
 const userSignUp = async (req: Request, res: Response) => {
     
@@ -22,16 +23,19 @@ const userSignUp = async (req: Request, res: Response) => {
     // Destrucutre the request body
     const { username, email, password }: signUpData = req.body;
 
-    // Check whether user already exists or not
-    const isFound = await UserModel.findOne({
-        username,
+    // Check whether email or username already exists or not
+    const isFound = await User.findOne({
         email
     });
 
+    const isTaken = await User.findOne({
+        username
+    })
+
     // Return Conflict Status Code if user exists
-    if(!isFound){
+    if(!isFound || !isTaken){
         res.status(409).json({
-            "Message": "User Already Exists"
+            "Message": "User with username and email Already Exists"
         })
     }
 
@@ -40,7 +44,7 @@ const userSignUp = async (req: Request, res: Response) => {
 
     // Create User
     try {
-        await UserModel.create({
+        await User.create({
             username,
             email,
             password: hashPassword
@@ -72,7 +76,7 @@ const userSignIn = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     // find whether user exists or not
-    const isFound = await UserModel.findOne({
+    const isFound = await User.findOne({
         email
     })
 
@@ -89,8 +93,9 @@ const userSignIn = async (req: Request, res: Response) => {
 
     if(isPasswordCorrect){
         const token: String =  jwt.sign({
+            username: isFound.username,
             email,
-            id: isFound?._id
+            id: isFound._id
         }, process.env.SECRET_KEY as string);
 
         res.status(200).json({

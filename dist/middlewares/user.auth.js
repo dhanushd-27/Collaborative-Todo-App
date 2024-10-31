@@ -13,9 +13,9 @@ const userAuth = (req, res, next) => {
         });
     }
     try {
-        const decodedData = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        const decodedData = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY);
         // req.cookies is not secured ig
-        req.cookies = decodedData;
+        req.user = decodedData;
         next();
     }
     catch (error) {

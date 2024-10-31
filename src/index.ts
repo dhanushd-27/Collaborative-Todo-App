@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv"
 import { UserRoutes } from "./routes/user.routes";
 import { ConnectDB } from "./db/db";
+import { ListRoutes } from "./routes/list.routes";
 
 dotenv.config();
 ConnectDB();
@@ -12,7 +13,8 @@ const app = express();
 app.use(express.json());
 
 // routes
-app.use("/api/v0/user/", UserRoutes);
+app.use("/api/v0/user", UserRoutes);
+app.use("/api/v0/list", ListRoutes);
 
 // Listen Route
 const PORT = process.env.PORT;

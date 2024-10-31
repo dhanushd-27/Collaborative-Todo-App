@@ -1,5 +1,5 @@
 interface signInData{
-    email: String,
+    email: string,
     password: string
 }
 
