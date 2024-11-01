@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addTask = void 0;
+exports.deleteTask = exports.updateTask = exports.addTask = void 0;
 const task_models_1 = require("../models/task.models");
 const team_models_1 = require("../models/team.models");
 const mongoose_1 = require("mongoose");
@@ -45,3 +45,58 @@ const addTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.addTask = addTask;
+const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // DON'T REFER THIS CODE, IT IS JUST A PROTOTYPE - we have no checks before updating the todo
+    // things to add
+    // check whether the request is from an listid which contains the taskid in it
+    // check whether the taskid is present in the database or not
+    try {
+        const { teamid, taskid } = req.params;
+        const completed = req.body.completed;
+        yield task_models_1.TaskModel.updateOne({
+            _id: taskid
+        }, {
+            completed: completed
+        });
+        res.status(200).json({
+            "Message": "Task completed successfully"
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            "Message": "Something went wrong"
+        });
+    }
+});
+exports.updateTask = updateTask;
+const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // DON'T REFER THIS CODE, IT IS JUST A PROTOTYPE - we have no checks before deleting a todo
+    try {
+        const { teamid, taskid } = req.params;
+        yield task_models_1.TaskModel.deleteOne({
+            _id: taskid
+        });
+        const deleted = yield team_models_1.TeamModel.updateOne({
+            _id: teamid
+        }, {
+            $pull: { tasks: taskid }
+        });
+        if (deleted.modifiedCount) {
+            res.status(200).json({
+                "Message": "Task Deleted Successfully"
+            });
+        }
+        else {
+            res.status(404).json({
+                "Message": "Task not found"
+            });
+        }
+    }
+    catch (error) {
+        res.json({
+            "Message": "Something went wrong"
+        });
+        return;
+    }
+});
+exports.deleteTask = deleteTask;
