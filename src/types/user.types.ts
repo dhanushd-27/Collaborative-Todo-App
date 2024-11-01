@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose"
+
 interface signInData{
     email: string,
     password: string
@@ -9,4 +11,12 @@ interface signUpData{
     password: string
 }
 
-export { signInData, signUpData }
+interface taskData{
+    title: string,
+    description: string,
+    assignee: ObjectId,
+    priority: string,
+    dueDate: Date
+}
+
+export { signInData, signUpData, taskData }
