@@ -4,7 +4,6 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { signUpData } from "../types/user.types";
 import { signInDataValidation, signUpDataValidation } from "../validation/user.validation";
-import { ObjectId } from "mongoose";
 
 const userSignUp = async (req: Request, res: Response) => {
     

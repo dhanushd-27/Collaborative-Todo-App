@@ -24,7 +24,7 @@ const createTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.log(details);
         res.status(200).json({
             "Message": "Teams Created Successfully",
-            "Details": details
+            "Details": {}
         });
     }
     catch (error) {

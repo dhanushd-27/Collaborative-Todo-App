@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
-    "dev": "npx tsc & nodemon dist/index.js"
+    "dev": "npx tsc && nodemon dist/index.js"
   },
   "keywords": [],
   "author": "",

@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv"
 import { UserRoutes } from "./routes/user.routes";
 import { ConnectDB } from "./db/db";
-import { ListRoutes } from "./routes/list.routes";
+import { TeamRoutes } from "./routes/team.routes";
 
 dotenv.config();
 ConnectDB();
@@ -14,7 +14,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/v0/user", UserRoutes);
-app.use("/api/v0/list", ListRoutes);
+app.use("/api/v0/team", TeamRoutes);
 
 // Listen Route
 const PORT = process.env.PORT;
