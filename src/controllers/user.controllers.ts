@@ -36,6 +36,8 @@ const userSignUp = async (req: Request, res: Response) => {
         res.status(409).json({
             "Message": "User with username and email Already Exists"
         })
+
+        return;
     }
 
     // Hash Password for Data Security
@@ -53,6 +55,9 @@ const userSignUp = async (req: Request, res: Response) => {
             "Message": "User Created Successfully"
         })
     } catch (error) {
+        res.status(400).json({
+            "Message": "Something went wrong!!"
+        })
         console.error(`Something went wrong ${error}`)
     }
 }

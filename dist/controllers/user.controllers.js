@@ -41,6 +41,7 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(409).json({
             "Message": "User with username and email Already Exists"
         });
+        return;
     }
     // Hash Password for Data Security
     const hashPassword = yield bcrypt_1.default.hash(password, 5);
@@ -56,6 +57,9 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
+        res.status(400).json({
+            "Message": "Something went wrong!!"
+        });
         console.error(`Something went wrong ${error}`);
     }
 });

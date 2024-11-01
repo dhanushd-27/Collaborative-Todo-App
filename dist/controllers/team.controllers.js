@@ -22,7 +22,8 @@ const createTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const newTeam = yield team_models_1.TeamModel.create({
             owner: id,
-            title: title
+            title: title,
+            collaborators: [id]
         });
         const details = yield team_models_1.TeamModel.findById(newTeam._id).populate('owner');
         console.log(details);
@@ -106,9 +107,16 @@ const removeCollaborator = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }, {
         $pull: { collaborators: userIdObjectId }
     });
-    res.json({
-        "Message": "Successfully removed Collaborator",
-        details: details
-    });
+    if (details.modifiedCount) {
+        res.json({
+            "Message": "Successfully removed Collaborator",
+            details: details
+        });
+    }
+    else {
+        res.json({
+            "Message": "Something went wrong!!"
+        });
+    }
 });
 exports.removeCollaborator = removeCollaborator;

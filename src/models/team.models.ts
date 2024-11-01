@@ -8,7 +8,12 @@ const TeamSchema = new mongoose.Schema(
     {
         owner: { type: ObjectId, ref: 'User' },
         title: String,
-        tasks: [TaskSchema],
+        tasks: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Task",
+            },
+        ],
         collaborators: [{ type: ObjectId, ref: 'User' }],
     },
     { timestamps: true }

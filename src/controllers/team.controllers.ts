@@ -12,7 +12,8 @@ export const createTeam = async (req: Request, res: Response) => {
     try {
         const newTeam = await TeamModel.create({
             owner: id,
-            title: title
+            title: title,
+            collaborators: [id]
         })
 
         const details = await TeamModel.findById(newTeam._id).populate('owner');
