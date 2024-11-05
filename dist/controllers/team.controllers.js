@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeCollaborator = exports.addCollaborator = exports.createTeam = void 0;
 const team_models_1 = require("../models/team.models");
 const mongoose_1 = __importDefault(require("mongoose"));
+const index_1 = require("../index");
 const createTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Get User Data from auth and Title of the group from body
     const { id } = req.user;
@@ -31,10 +32,16 @@ const createTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             "Message": "Teams Created Successfully",
             "Details": details
         });
+        index_1.wss.clients.forEach((client) => {
+            if (client.readyState == client.OPEN) {
+                client.send(JSON.stringify(details));
+            }
+        });
     }
     catch (error) {
         res.status(400).json({
-            "Message": "Something went wrong!!"
+            "Message": "Something went wrong!!",
+            Error: error
         });
     }
 });

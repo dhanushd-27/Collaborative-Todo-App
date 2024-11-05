@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { TeamModel } from '../models/team.models';
 import mongoose from 'mongoose';
-
+import { wss } from '../index';
 
 export const createTeam = async (req: Request, res: Response) => {
 
@@ -18,16 +18,21 @@ export const createTeam = async (req: Request, res: Response) => {
 
         const details = await TeamModel.findById(newTeam._id).populate('owner');
 
-        console.log(details);
-
         res.status(201).json({
             "Message": "Teams Created Successfully",
             "Details": details
         })
+
+        wss.clients.forEach((client) => {
+            if( client.readyState == client.OPEN){
+                client.send(JSON.stringify(details))
+            }
+        })
     } catch (error) {
         
         res.status(400).json({
-            "Message": "Something went wrong!!"
+            "Message": "Something went wrong!!",
+            Error: error
         })
     }
 }
