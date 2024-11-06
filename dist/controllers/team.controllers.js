@@ -27,7 +27,6 @@ const createTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             collaborators: [id]
         });
         const details = yield team_models_1.TeamModel.findById(newTeam._id).populate('owner');
-        console.log(details);
         res.status(201).json({
             "Message": "Teams Created Successfully",
             "Details": details

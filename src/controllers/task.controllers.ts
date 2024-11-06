@@ -78,7 +78,7 @@ export const deleteTask = async ( req: Request, res: Response ) => {
 
     try {
         const { teamid, taskid } = req.params;
-
+        
         await TaskModel.deleteOne({
             _id: taskid
         });

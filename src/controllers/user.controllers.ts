@@ -32,7 +32,8 @@ const userSignUp = async (req: Request, res: Response) => {
     })
 
     // Return Conflict Status Code if user exists
-    if(!isFound || !isTaken){
+    
+    if(isFound || isTaken){
         res.status(409).json({
             "Message": "User with username and email Already Exists"
         })
