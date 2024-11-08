@@ -9,7 +9,7 @@ const userSignUp = async (req: Request, res: Response) => {
     
     // Input Validation
     const isValid = signUpDataValidation.safeParse(req.body);
-
+    
     if(!isValid.success){
         res.status(400).json({
             "Message": "Invalid Data Input",
@@ -59,7 +59,7 @@ const userSignUp = async (req: Request, res: Response) => {
         res.status(400).json({
             "Message": "Something went wrong!!"
         })
-        console.error(`Something went wrong ${error}`)
+        throw new Error("Something went wrong while creating user")
     }
 }
 

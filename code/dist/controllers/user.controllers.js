@@ -60,7 +60,7 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(400).json({
             "Message": "Something went wrong!!"
         });
-        console.error(`Something went wrong ${error}`);
+        throw new Error("Something went wrong while creating user");
     }
 });
 exports.userSignUp = userSignUp;
