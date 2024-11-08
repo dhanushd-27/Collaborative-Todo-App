@@ -52,7 +52,7 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             email,
             password: hashPassword
         });
-        res.status(200).json({
+        res.status(201).json({
             "Message": "User Created Successfully"
         });
     }

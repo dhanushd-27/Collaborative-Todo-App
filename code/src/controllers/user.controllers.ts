@@ -52,7 +52,7 @@ const userSignUp = async (req: Request, res: Response) => {
             password: hashPassword
         })
 
-        res.status(200).json({
+        res.status(201).json({
             "Message": "User Created Successfully"
         })
     } catch (error) {
