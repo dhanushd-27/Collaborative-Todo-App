@@ -109,3 +109,73 @@ describe("Sign Up", () => {
 
     // How to make a test if the database url doesn't work?
 })
+
+describe("Sign In", () => {
+    
+    // Successfull Sign In
+    test("Signin Successfull", async () => {
+
+        const username = `orca${Math.random()}`
+        const email = `orca${Math.random()}@gmail.com`;
+        const password = "1231231231";
+
+        await axios.post(`${BACKEND_URL}/user/signup`, {
+            username,
+            email,
+            password
+        })
+
+        const response = await axios.post(`${BACKEND_URL}/user/signin`, {
+            email,
+            password
+        })
+
+        expect(response.status).toBe(200);
+    })
+
+    // User Sign in Failed
+    test("User Signin Failed", async () => {
+        const username = `orca${Math.random()}`;
+        const email = `orca${Math.random()}@gmail.com`;
+        const password = "1231231231";
+
+        try {
+            await axios.post(`${BACKEND_URL}/user/signup`, {
+                username,
+                email,
+                password
+            })
+    
+            await axios.post(`${BACKEND_URL}/user/signin`, {
+                email,
+                password: "Wrong Password"
+            })
+
+        } catch (error: AxiosError) {
+            expect(error.response.status).toBe(401);
+        }
+    })
+
+    // Invalid Signinn Input
+    test("User Signin Failed", async () => {
+        const username = `orca${Math.random()}`;
+        const email = `orca${Math.random()}@gmail.com`;
+        const password = "1231231231";
+
+        try {
+            await axios.post(`${BACKEND_URL}/user/signup`, {
+                username,
+                email,
+                password
+            })
+    
+            await axios.post(`${BACKEND_URL}/user/signin`, {
+                email: "52326262642626236",
+                password: "Wrong Password"
+            })
+    
+        } catch (error: AxiosError) {
+            expect(error.response.status).toBe(400);
+        }
+    })
+})
