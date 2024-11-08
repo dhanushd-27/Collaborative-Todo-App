@@ -133,7 +133,7 @@ describe("Sign In", () => {
         expect(response.status).toBe(200);
     })
 
-    // User Sign in Failed
+    // Unauthorised User
     test("User Signin Failed", async () => {
         const username = `orca${Math.random()}`;
         const email = `orca${Math.random()}@gmail.com`;
@@ -156,8 +156,8 @@ describe("Sign In", () => {
         }
     })
 
-    // Invalid Signinn Input
-    test("User Signin Failed", async () => {
+    // Invalid Signin Input
+    test("Invalid Sign in Input", async () => {
         const username = `orca${Math.random()}`;
         const email = `orca${Math.random()}@gmail.com`;
         const password = "1231231231";
@@ -176,6 +176,22 @@ describe("Sign In", () => {
     
         } catch (error: AxiosError) {
             expect(error.response.status).toBe(400);
+        }
+    })
+
+    // User Not Found
+    test("User not found", async () => {
+        try {
+            const email = `orca${Math.random()}@gmail.com`;
+            const password = "1231231231";
+
+        await axios.post(`${BACKEND_URL}/user/signin`, {
+            email,
+            password
+        })
+
+        } catch (error: AxiosError) {
+            expect(error.response.status).toBe(404);
         }
     })
 })
