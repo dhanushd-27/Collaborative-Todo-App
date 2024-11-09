@@ -46,14 +46,19 @@ const userSignUp = async (req: Request, res: Response) => {
 
     // Create User
     try {
-        await User.create({
+        const response = await User.create({
             username,
             email,
             password: hashPassword
         })
 
+        const updatedResponse = await User.findById({
+            _id: response._id
+        }).select("-password")
+
         res.status(201).json({
-            "Message": "User Created Successfully"
+            "Message": "User Created Successfully",
+            Response: updatedResponse
         })
     } catch (error) {
         res.status(400).json({

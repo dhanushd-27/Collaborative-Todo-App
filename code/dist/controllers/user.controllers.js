@@ -47,13 +47,17 @@ const userSignUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const hashPassword = yield bcrypt_1.default.hash(password, 5);
     // Create User
     try {
-        yield user_models_1.default.create({
+        const response = yield user_models_1.default.create({
             username,
             email,
             password: hashPassword
         });
+        const updatedResponse = yield user_models_1.default.findById({
+            _id: response._id
+        }).select("-password");
         res.status(201).json({
-            "Message": "User Created Successfully"
+            "Message": "User Created Successfully",
+            Response: updatedResponse
         });
     }
     catch (error) {

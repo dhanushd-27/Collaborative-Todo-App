@@ -34,7 +34,8 @@ const addTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             $push: { tasks: TaskDetails._id }
         });
         res.status(201).json({
-            "Message": "New Task Created and Assigned"
+            "Message": "New Task Created and Assigned",
+            TaskDetails
         });
     }
     catch (error) {

@@ -32,7 +32,8 @@ export const addTask = async ( req: Request, res: Response ) => {
         })
 
         res.status(201).json({
-            "Message": "New Task Created and Assigned"
+            "Message": "New Task Created and Assigned",
+            TaskDetails
         })
     } catch (error) {
         
