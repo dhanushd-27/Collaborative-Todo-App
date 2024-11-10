@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
 import { TeamModel } from '../models/team.models';
 import mongoose from 'mongoose';
-import { wss } from '../index';
-
 export const createTeam = async (req: Request, res: Response) => {
 
     // Get User Data from auth and Title of the group from body
@@ -23,11 +21,6 @@ export const createTeam = async (req: Request, res: Response) => {
             "Details": details
         })
 
-        wss.clients.forEach((client) => {
-            if( client.readyState == client.OPEN){
-                client.send(JSON.stringify(details))
-            }
-        })
     } catch (error) {
         
         res.status(400).json({

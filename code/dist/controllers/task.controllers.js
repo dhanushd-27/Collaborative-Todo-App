@@ -13,6 +13,7 @@ exports.deleteTask = exports.updateTask = exports.addTask = void 0;
 const task_models_1 = require("../models/task.models");
 const team_models_1 = require("../models/team.models");
 const mongoose_1 = require("mongoose");
+const __1 = require("..");
 const addTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // checks to be added such as 
     // input data validation
@@ -37,6 +38,11 @@ const addTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             "Message": "New Task Created and Assigned",
             TaskDetails
         });
+        __1.wss.clients.forEach((client) => {
+            if (client.readyState == client.OPEN) {
+                client.send(JSON.stringify(TaskDetails));
+            }
+        });
     }
     catch (error) {
         res.status(400).json({
@@ -59,8 +65,17 @@ const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }, {
             completed: completed
         });
+        const CompletedTask = yield task_models_1.TaskModel.findOne({
+            _id: taskid
+        });
         res.status(200).json({
-            "Message": "Task completed successfully"
+            "Message": "Task completed successfully",
+            CompletedTask
+        });
+        __1.wss.clients.forEach((client) => {
+            if (client.readyState == client.OPEN) {
+                client.send(JSON.stringify(CompletedTask));
+            }
         });
     }
     catch (error) {

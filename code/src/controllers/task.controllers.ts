@@ -3,6 +3,7 @@ import { taskData } from "../types/user.types";
 import { TaskModel } from "../models/task.models";
 import { TeamModel } from "../models/team.models";
 import { Types } from "mongoose";
+import { wss } from "..";
 
 
 export const addTask = async ( req: Request, res: Response ) => {
@@ -35,6 +36,12 @@ export const addTask = async ( req: Request, res: Response ) => {
             "Message": "New Task Created and Assigned",
             TaskDetails
         })
+
+        wss.clients.forEach((client) => {
+            if( client.readyState == client.OPEN){
+                client.send(JSON.stringify(TaskDetails))
+            }
+        })
     } catch (error) {
         
         res.status(400).json({
@@ -53,7 +60,7 @@ export const updateTask = async ( req: Request, res: Response ) => {
     // check whether the taskid is present in the database or not
 
     try {
-        const { teamid, taskid } = req.params;
+        const { taskid } = req.params;
         const completed : boolean = req.body.completed;
 
         await TaskModel.updateOne({
@@ -62,9 +69,21 @@ export const updateTask = async ( req: Request, res: Response ) => {
             completed: completed
         })
 
-        res.status(200).json({
-            "Message": "Task completed successfully"
+        const CompletedTask = await TaskModel.findOne({
+            _id: taskid
         })
+
+        res.status(200).json({
+            "Message": "Task completed successfully",
+            CompletedTask
+        })
+
+        wss.clients.forEach((client) => {
+            if( client.readyState == client.OPEN){
+                client.send(JSON.stringify(CompletedTask))
+            }
+        })
+
     } catch (error) {
         res.status(400).json({
             "Message": "Something went wrong"
