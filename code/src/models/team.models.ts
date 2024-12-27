@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { TaskSchema } from "./task.models";
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
